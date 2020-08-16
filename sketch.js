@@ -4,14 +4,14 @@ function setup() {
 
 function draw() {
   background(255,255,255);
-  mosquitos();
+  mosquito();
   fly();
   ant();
-  bees();  
+  bee();  
   drawSprites();
 }
 
-function mosquitos() {
+function mosquito() {
   if (frameCount% 100==0){
     var m=createSprite(random(50, 750), 0, 30, 30);
     m.shapeColor="black";
@@ -35,7 +35,7 @@ function ant() {
     a.lifetime=110;
   }
 }
-function bees() {
+function bee() {
   if (frameCount% 250==0){
     var b=createSprite(random(50, 750), 0, 30, 30);
     b.shapeColor="yellow";
@@ -43,9 +43,9 @@ function bees() {
     b.lifetime=110;
   }
 }
-
-
-
-
-
-
+function preload() {
+  mosquito = loadImage("M2.png");
+  fly = loadImage("F2.png");
+  ant = loadImage("A2.png");
+  bee = loadImage("B2.png")
+}
