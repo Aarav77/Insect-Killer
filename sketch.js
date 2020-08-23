@@ -28,6 +28,18 @@ function draw() {
   ant();
   bee();  
   drawSprites();
+  if(groupM.isTouching(player)){
+    groupM.destroyEach();
+  }
+  if(groupF.isTouching(player)){
+    groupF.destroyEach();
+  }
+  if(groupA.isTouching(player)){
+    groupA.destroyEach();
+  }
+  if(groupB.isTouching(player)){
+    groupB.destroyEach();
+  }
 }
 
 function mosquito() {
