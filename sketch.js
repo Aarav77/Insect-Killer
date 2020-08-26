@@ -1,77 +1,105 @@
-var flyImage, mosquitoImage, antImage, beeImage, player, playerImage;
-var groupM, groupB, groupA, groupF;
+var PLAY=1; 
+var END=0;
+var gamestate=PLAY;
+var mosquitoImage, antImage, beeImage, player, playerImage;
+var groupM, groupB, groupA, BG, score;
+var gameover, restart, gameoverImage, restartImage;
+var groupM1, groupB1, groupA1;
 function preload() {
   mosquitoImage = loadImage("M2.png");
-  flyImage = loadImage("F2.png");
   antImage = loadImage("A2.png");
   beeImage = loadImage("B2.png");
-  playerImage = loadImage("P2.png")
+  playerImage = loadImage("P2.png");
+  BG = loadImage("BG.png");
+  gameoverImage = loadImage("GO.png");
+  restartImage = loadImage("R2.png");
 }
 
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(1000, 1000);
+  textSize(30);
+  textFont("verdana");
+  fill ("white");
   player=createSprite(400, 400, 40, 40);
   player.addImage(playerImage);
   groupM=new Group();
   groupA=new Group();
   groupB=new Group();
-  groupF=new Group();
+  groupM1=new Group();
+  groupA1=new Group();
+  groupB1=new Group();
+  score=0;
+  gameover = createSprite(400,300);
+  gameover.addImage(gameoverImage);
+  
+  restart = createSprite(400,600);
+  restart.addImage(restartImage);
+  gameover.scale=2.5;
+  restart.scale=1;
+  gameover.visible=false;
+  restart.visible=false;
 }
 
 function draw() {
-  background(255,255,255);
-  player.x=mouseX;
-  player.y=mouseY;
-  mosquito();
-  fly();
-  ant();
-  bee();  
-  drawSprites();
-  if(groupM.isTouching(player)){
-    groupM.destroyEach();
+  background(BG);
+  text(score, 600, 50);
+  if (gamestate===PLAY){
+    player.x=mouseX;
+    player.y=mouseY;
+    mosquito();
+    ant();
+    bee(); 
+    mosquito1();
+    ant1();
+    bee1(); 
+    /*
+    if (mousePressedOver(groupA)){
+      groupA.destroyEach();
+      score+=1;
+    }
+    if (mousePressedOver(groupB)){
+      groupB.destroyEach();
+      score-=1;
+    }
+    if (mousePressedOver(groupM)){
+      gamestate=END;
+     }
+     */
   }
-  if(groupF.isTouching(player)){
-    groupF.destroyEach();
+ 
+  else if (gamestate===END){
+   gameover.visible=true;
+   restart.visible=true;
+   groupM.velocityY=0;
+   groupA.velocityY=0;
+   groupB.velocityY=0;
+   if (mousePressedOver(restart)) {
+    reset();
   }
-  if(groupA.isTouching(player)){
-    groupA.destroyEach();
   }
-  if(groupB.isTouching(player)){
-    groupB.destroyEach();
-  }
-}
+drawSprites();
+ }
+ 
 
 function mosquito() {
-  if (frameCount% 100==0){
+  if (frameCount% 45==0){
     var m=createSprite(random(50, 750), 0, 30, 30);
     m.addImage(mosquitoImage);
     m.shapeColor="black";
-    m.velocityY=random(7, 15);
+    m.velocityY=random(25, 50);
     m.lifetime=110;
     m.depth=player.depth;
     player.depth+=1;
     groupM.add(m);
   }
 }
-function fly() {
-  if (frameCount% 120==0){
-    var f=createSprite(random(50, 750), 0, 30, 30);
-    f.addImage(flyImage);
-    f.shapeColor="brown";
-    f.velocityY=random(10, 15);
-    f.lifetime=110;
-    f.depth=player.depth;
-    player.depth+=1;
-    groupF.add(f);
-  }
-}
 function ant() {
-  if (frameCount% 130==0){
+  if (frameCount% 45==0){
     var a=createSprite(random(50, 750), 0, 30, 30);
     a.addImage(antImage);
     a.shapeColor="red";
-    a.velocityY=random(5, 10);
+    a.velocityY=random(25, 50);
     a.lifetime=110;
     a.depth=player.depth;
     player.depth+=1;
@@ -79,14 +107,70 @@ function ant() {
   }
 }
 function bee() {
-  if (frameCount% 250==0){
-    var b=createSprite(random(50, 750), 0, 30, 30);
+  if (frameCount% 55==0){
+    var b=createSprite(random(740, 750), 0, 30, 30);
     b.addImage(beeImage);
     b.shapeColor="yellow";
-    b.velocityY=random(5, 30);
+    b.velocityY=random(25, 50);
     b.lifetime=110;
     b.depth=player.depth;
     player.depth+=1;
     groupB.add(b);
+  }
+}
+function mosquito1() {
+  if (frameCount% 42==0){
+    var m=createSprite(random(50, 750), 0, 30, 30);
+    m.addImage(mosquitoImage);
+    m.shapeColor="black";
+    m.velocityY=random(25, 50);
+    m.lifetime=110;
+    m.depth=player.depth;
+    player.depth+=1;
+    groupM1.add(m);
+  }
+}
+function ant1() {
+  if (frameCount% 48==0){
+    var a=createSprite(random(50, 750), 0, 30, 30);
+    a.addImage(antImage);
+    a.shapeColor="red";
+    a.velocityY=random(25, 50);
+    a.lifetime=110;
+    a.depth=player.depth;
+    player.depth+=1;
+    groupA1.add(a);
+  }
+}
+function bee1() {
+  if (frameCount% 53==0){
+    var b=createSprite(random(740, 750), 0, 30, 30);
+    b.addImage(beeImage);
+    b.shapeColor="yellow";
+    b.velocityY=random(25, 50);
+    b.lifetime=110;
+    b.depth=player.depth;
+    player.depth+=1;
+    groupB1.add(b);
+  }
+}
+function reset(){
+  gamestate = PLAY;
+  gameover.visible = false;
+  restart.visible = false;
+  score=0;
+}
+function mouseClicked(){
+  if(groupM.isTouching(player)||groupM1.isTouching(player)){
+    groupM.destroyEach();
+    gamestate=END;
+  }
+  if(groupA.isTouching(player)||groupA1.isTouching(player)){
+    groupA.destroyEach();
+    score++;
+  }
+  if(groupB.isTouching(player)||groupB1.isTouching(player)){
+    groupB.destroyEach();
+    score-=3;
   }
 }
